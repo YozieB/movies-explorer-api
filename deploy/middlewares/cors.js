@@ -1,8 +1,6 @@
 const allowedCors = [
   'https://movies-api.nomoredomains.club',
-  'http://movies-api.nomoredomains.club',
-  'https://api.yomovies.nomoredomains.club',
-  'http://yomovies.nomoredomains.club',
+  'http://movies-api.yozieb.nomoredomains.club',
   'https://localhost:3000',
   'http://localhost:3000',
 ];
