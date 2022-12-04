@@ -6,6 +6,7 @@ const errorHandler = require('./middlewares/error');
 const router = require('./routes');
 const cors = require('./middlewares/cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { PORT_CFG, DB_CFG } = require('./utils/config');
 
 const app = express();
 app.use(express.json());
@@ -16,11 +17,11 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 mongoose
-  .connect('mongodb://localhost:27017/bitfilmsdb')
+  .connect(DB_CFG)
   .then(() => console.log('DB OK'))
   .catch((error) => console.log(`DB Error: ${error}`));
 
-app.listen(3000, (error) => {
+app.listen(PORT_CFG, (error) => {
   if (error) {
     console.log(`Server Error: ${error}`);
   } else {
