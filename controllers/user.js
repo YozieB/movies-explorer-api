@@ -4,6 +4,8 @@ const userModel = require('../models/user');
 const { NOT_FOUND_ERROR_CODE, JWT_SECRET } = require('../utils/constants');
 const BadRequestError = require('../utils/errors/badRequestError');
 const ConflictError = require('../utils/errors/conflictError');
+const NotFoundError = require('../utils/errors/notFoundError');
+const UnauthorizedError = require('../utils/errors/unathorizedError');
 
 const createUser = async (req, res, next) => {
   try {
@@ -14,7 +16,7 @@ const createUser = async (req, res, next) => {
       email,
       password: hash,
     });
-    res.send({
+    res.json({
       message: 'Пользователь успешно создан',
     });
   } catch (e) {
@@ -60,21 +62,16 @@ const updateUser = async (req, res, next) => {
 
 const getMe = async (req, res, next) => {
   try {
-    const { id } = req.user._id;
-    const user = await userModel.findById(id);
-
+    const user = await userModel.findOne({ _id: req.user._id });
     if (!user) {
-      return res.status(NOT_FOUND_ERROR_CODE).json({
-        message: 'Пользователь не найден',
-      });
+      throw new NotFoundError('Пользователь с таким id не найден');
     }
-
-    res.send(user);
-  } catch (e) {
-    if (e.name === 'CastError') {
-      next(new BadRequestError('Переданы не валидные данные'));
+    res.json(user);
+  } catch (error) {
+    if (error.name === 'CastError') {
+      next(new BadRequestError('Переданы некорректные данные'));
     } else {
-      next(e);
+      next(error);
     }
   }
 };
@@ -84,11 +81,11 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await userModel.findUserByCredentials(email, password);
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
-    res.send({
+    res.json({
       token,
     });
   } catch (e) {
-    next(e);
+    next(new UnauthorizedError('Неправильные почта или пароль'));
   }
 };
 

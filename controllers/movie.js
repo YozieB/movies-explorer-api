@@ -22,7 +22,7 @@ const createMovie = async (req, res, next) => {
       year,
       description,
       image,
-      trailer,
+      trailerLink,
       nameRU,
       nameEN,
       thumbnail,
@@ -35,7 +35,7 @@ const createMovie = async (req, res, next) => {
       year,
       description,
       image,
-      trailer,
+      trailerLink,
       nameRU,
       nameEN,
       thumbnail,
@@ -54,7 +54,7 @@ const createMovie = async (req, res, next) => {
 
 const deleteMovie = async (req, res, next) => {
   try {
-    const movieToRemove = await movieModel.findById(req.params.movieId);
+    const movieToRemove = await movieModel.findById(req.params._id);
     if (!movieToRemove) {
       throw new NotFoundError('Фильм с таким id не найден');
     }
