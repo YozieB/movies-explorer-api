@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     minLength: 2,
     maxLength: 30,
+    required: true,
   },
 });
 
@@ -37,7 +38,7 @@ userSchema.statics.findUserByCredentials = async function (email, password) {
     }
     return user;
   } catch (e) {
-    console.log(e);
+    return new UnauthorizedError('Неправильные почта или пароль');
   }
 };
 

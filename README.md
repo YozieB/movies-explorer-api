@@ -1,1 +1,1 @@
-Ссылка на сервер: http://movies-api.nomoredomains.club/
+Ссылка на сервер: https://api.yomovies.nomoredomains.club/
